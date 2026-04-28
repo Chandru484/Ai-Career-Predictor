@@ -50,7 +50,11 @@ git clone <your-repo-url>
 cd ai-career-predictor
 ```
 
-### 2. Install Python dependencies
+### 2. Configure backend environment
+
+Copy `backend/.env.example` to `backend/.env` and fill in your own API keys, Supabase credentials, and Clerk URL before starting the backend.
+
+### 3. Install Python dependencies
 
 ```bash
 # On Windows
@@ -66,13 +70,13 @@ python3 -m venv .venv
 
 > This project uses `.venv` in the current workspace.
 
-### 3. Install frontend dependencies
+### 4. Install frontend dependencies
 
 ```bash
 npm install
 ```
 
-### 4. Run locally
+### 5. Run locally
 
 Open **two terminals**:
 
