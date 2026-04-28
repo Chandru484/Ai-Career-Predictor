@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Career Predictor - Dummy UI</title>
+    <style>
+        body { font-family: -apple-system, system-ui, sans-serif; max-width: 800px; margin: 2rem auto; padding: 0 1rem; color: #333; line-height: 1.6; }
+        .card { border: 1px solid #ddd; padding: 2rem; border-radius: 8px; margin-bottom: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; }
+        label { font-weight: bold; display: block; margin-top: 1rem; }
+        input, textarea, button { width: 100%; padding: 0.75rem; margin-top: 0.5rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { background-color: #3498db; color: white; border: none; cursor: pointer; font-weight: bold; margin-top: 1.5rem; }
+        button:hover { background-color: #2980b9; }
+        #resultJSON { background-color: #f1f2f6; padding: 1rem; border-radius: 4px; white-space: pre-wrap; font-family: monospace; overflow-x: auto; }
+        .token-warning { background: #ffeaa7; padding: 1rem; border-radius: 4px; border-left: 4px solid #fdcb6e; margin-bottom: 2rem;}
+    </style>
+</head>
+<body>
+
+    <h1>AI Career Predictor</h1>
+    <div class="token-warning">
+        <strong>Note:</strong> Set DEV_MODE=true in .env to bypass strict Clerk Auth check locally, or provide a Bearer token.
+    </div>
+
+    <div class="card">
+        <h2>1. Step One: Upload Resume (PDF)</h2>
+        <form id="uploadForm">
+            <input type="file" id="resumeFile" accept="application/pdf" required>
+            <button type="submit">Extract Resume</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>2. Step Two: Generate Prediction</h2>
+        <form id="predictForm">
+            <label for="devToken">Fake Auth Token (or set DEV_MODE=true in .env)</label>
+            <input type="text" id="devToken" placeholder="Bearer dummy_token..." value="Bearer dev_token">
+
+            <label for="resumeText">Extracted Resume Text</label>
+            <textarea id="resumeText" rows="6" placeholder="Extracted text will appear here..."></textarea>
+            
+            <label for="traits">Personality/Interest Answers (JSON format)</label>
+            <textarea id="traits" rows="4">{"Q1": "I love solving complex algorithmic puzzles", "Q2": "I enjoy leading a team"}</textarea>
+            
+            <button type="submit">Predict Career Path</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>Results</h2>
+        <pre id="resultJSON">Awaiting API call...</pre>
+    </div>
+
+    <script>
+        const API_URL = "/api";
+
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const file = document.getElementById('resumeFile').files[0];
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const res = await fetch(`${API_URL}/resume`, {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    document.getElementById('resumeText').value = data.resume_text;
+                    alert("Resume text extracted successfully!");
+                } else {
+                    alert('Error: ' + JSON.stringify(data));
+                }
+            } catch (err) {
+                console.error("Fetch error details:", err);
+                alert("Failed to call API. Details: " + err.message + "\n\nPlease ensure you are running the backend and accessing this page from http://localhost:8000/static/index.html");
+            }
+        });
+
+        document.getElementById('predictForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const resumeText = document.getElementById('resumeText').value;
+            const traits = JSON.parse(document.getElementById('traits').value);
+            const token = document.getElementById('devToken').value;
+
+            document.getElementById('resultJSON').innerText = "Loading prediction... please wait...";
+            
+            try {
+                const res = await fetch(`${API_URL}/predict`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': token
+                    },
+                    body: JSON.stringify({
+                        personality_answers: traits,
+                        resume_text: resumeText
+                    })
+                });
+                const data = await res.json();
+                document.getElementById('resultJSON').innerText = JSON.stringify(data, null, 2);
+            } catch (err) {
+                console.error(err);
+                document.getElementById('resultJSON').innerText = "Error requesting prediction: " + err.message;
+            }
+        });
+    </script>
+</body>
+</html>

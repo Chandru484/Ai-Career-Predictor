@@ -1,0 +1,485 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700;800&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ══════════════════════════════════════════════════
+   RESUME BUILDER — DESIGN SYSTEM
+══════════════════════════════════════════════════ */
+:root {
+  --rb-primary:     #96e630;
+  --rb-primary-h:   #a8f044;
+  --rb-primary-d:   #81cc24;
+  --rb-bg:          #0a0a0a;
+  --rb-surface:     #161616;
+  --rb-surface-2:   #1c1c1c;
+  --rb-surface-3:   #242424;
+  --rb-border:      rgba(150,230,48,0.25);
+  --rb-border-s:    rgba(255,255,255,0.09);
+  --rb-text:        #ffffff;
+  --rb-muted:       #888888;
+  --rb-success:     #96e630;
+  --rb-warning:     #c8f03e;
+  --rb-danger:      #ff4d4d;
+  --rb-radius:      12px;
+  --rb-radius-sm:   6px;
+  --rb-shadow:      0 8px 40px rgba(0,0,0,0.8);
+  --rb-glow:        0 0 30px rgba(150,230,48,0.15);
+}
+
+/* ══════════════════════════════════════════════════
+   BASE RESET
+══════════════════════════════════════════════════ */
+.rb-root * { box-sizing: border-box; font-family: 'Inter', system-ui, sans-serif; }
+.rb-root { height: 100vh; overflow: hidden; background: var(--rb-bg); }
+
+/* ══════════════════════════════════════════════════
+   SCROLLBAR
+══════════════════════════════════════════════════ */
+.rb-root ::-webkit-scrollbar { width: 4px; height: 4px; }
+.rb-root ::-webkit-scrollbar-track { background: transparent; }
+.rb-root ::-webkit-scrollbar-thumb {
+  background: rgba(150,230,48,0.35);
+  border-radius: 99px;
+}
+.rb-root ::-webkit-scrollbar-thumb:hover { background: rgba(150,230,48,0.6); }
+
+/* ══════════════════════════════════════════════════
+   ANIMATIONS
+══════════════════════════════════════════════════ */
+@keyframes rb-fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes rb-slide-in {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes rb-pulse-dot {
+  0%,100% { opacity: 1; }
+  50%      { opacity: 0.4; }
+}
+.animate-slide-up { animation: rb-fade-up 0.25s ease forwards; }
+.animate-slide-in { animation: rb-slide-in 0.2s ease forwards; }
+
+/* ══════════════════════════════════════════════════
+   COMPONENT LAYER
+══════════════════════════════════════════════════ */
+@layer components {
+
+  /* ─── Cards ─── */
+  .rb-card {
+    border-radius: var(--rb-radius);
+    border: 1px solid var(--rb-border-s);
+    padding: 1.25rem;
+    background: var(--rb-surface-2);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.35);
+    transition: box-shadow 0.25s ease, border-color 0.25s ease;
+  }
+  .rb-card:hover {
+    box-shadow: 0 6px 30px rgba(150,230,48,0.15);
+    border-color: rgba(150,230,48,0.25);
+  }
+
+  .rb-panel {
+    background: var(--rb-surface);
+    border-right: 1px solid var(--rb-border-s);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ─── Glass ─── */
+  .rb-glass {
+    backdrop-filter: blur(20px) saturate(180%);
+    background: rgba(15,16,32,0.85);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  /* ─── Buttons ─── */
+  .rb-btn {
+    @apply inline-flex items-center gap-2 rounded-xl font-semibold text-sm
+           transition-all duration-200 cursor-pointer select-none whitespace-nowrap;
+    padding: 0.5rem 1rem;
+    letter-spacing: -0.01em;
+  }
+  .rb-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .rb-btn-primary {
+    @apply rb-btn text-white;
+    background: linear-gradient(135deg, #96e630 0%, #c8f03e 100%);
+    box-shadow: 0 4px 16px rgba(150,230,48,0.4);
+  }
+  .rb-btn-primary:hover:not(:disabled) {
+    box-shadow: 0 6px 24px rgba(150,230,48,0.55);
+    transform: translateY(-1px);
+    filter: brightness(1.1);
+  }
+  .rb-btn-primary:active { transform: translateY(0); }
+
+  .rb-btn-ghost {
+    @apply rb-btn;
+    color: var(--rb-muted);
+    background: transparent;
+    border: 1px solid var(--rb-border-s);
+  }
+  .rb-btn-ghost:hover:not(:disabled) {
+    color: white;
+    background: rgba(255,255,255,0.07);
+    border-color: rgba(255,255,255,0.15);
+  }
+
+  .rb-btn-danger {
+    @apply rb-btn text-white;
+    background: rgba(239,68,68,0.15);
+    border: 1px solid rgba(239,68,68,0.3);
+    color: #fca5a5;
+  }
+  .rb-btn-danger:hover:not(:disabled) {
+    background: rgba(239,68,68,0.8);
+    border-color: #ef4444;
+    color: white;
+  }
+
+  .rb-btn-icon {
+    @apply rb-btn;
+    padding: 0.5rem;
+    color: var(--rb-muted);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--rb-border-s);
+    border-radius: 10px;
+  }
+  .rb-btn-icon:hover:not(:disabled) {
+    color: white;
+    background: rgba(150,230,48,0.15);
+    border-color: rgba(150,230,48,0.4);
+  }
+
+  /* ─── Form Controls ─── */
+  .rb-input {
+    @apply w-full rounded-xl px-4 py-2.5 text-sm font-medium outline-none
+           transition-all duration-200;
+    color: var(--rb-text);
+    background: rgba(255,255,255,0.04);
+    border: 1.5px solid rgba(255,255,255,0.08);
+    caret-color: var(--rb-primary-h);
+  }
+  .rb-input::placeholder { color: rgba(148,163,184,0.5); }
+  .rb-input:hover { border-color: rgba(150,230,48,0.3); }
+  .rb-input:focus {
+    border-color: var(--rb-primary);
+    background: rgba(150,230,48,0.06);
+    box-shadow: 0 0 0 3px rgba(150,230,48,0.18);
+  }
+  .rb-input:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .rb-textarea {
+    @apply rb-input resize-none leading-relaxed;
+  }
+
+  .rb-select {
+    @apply rb-input cursor-pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238892a4' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+  }
+
+  /* ─── Labels ─── */
+  .rb-label {
+    @apply block text-xs font-semibold mb-1.5 tracking-wide uppercase;
+    color: var(--rb-muted);
+    letter-spacing: 0.06em;
+  }
+
+  .rb-section-title {
+    @apply text-xs font-bold uppercase tracking-widest mb-3;
+    color: var(--rb-primary-h);
+  }
+
+  /* ─── Badge ─── */
+  .rb-badge {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full
+           text-xs font-semibold;
+    background: rgba(150,230,48,0.15);
+    color: #a5b4fc;
+    border: 1px solid rgba(150,230,48,0.25);
+  }
+
+  .rb-badge-success {
+    background: rgba(34,197,94,0.15);
+    color: #86efac;
+    border: 1px solid rgba(34,197,94,0.25);
+  }
+
+  .rb-badge-warning {
+    background: rgba(245,158,11,0.15);
+    color: #fcd34d;
+    border: 1px solid rgba(245,158,11,0.25);
+  }
+
+  .rb-badge-danger {
+    background: rgba(239,68,68,0.15);
+    color: #fca5a5;
+    border: 1px solid rgba(239,68,68,0.25);
+  }
+
+  /* ─── Sidebar nav links ─── */
+  .rb-sidebar-link {
+    @apply flex items-center gap-3 rounded-xl text-sm font-medium
+           transition-all duration-200 cursor-pointer;
+    padding: 0.625rem 0.875rem;
+    color: var(--rb-muted);
+  }
+  .rb-sidebar-link:hover {
+    color: var(--rb-text);
+    background: rgba(255,255,255,0.055);
+  }
+  .rb-sidebar-link.active {
+    color: white;
+    background: linear-gradient(135deg, rgba(150,230,48,0.25), rgba(200,240,62,0.15));
+    border: 1px solid rgba(150,230,48,0.3);
+    box-shadow: 0 2px 12px rgba(150,230,48,0.2);
+  }
+
+  /* ─── Divider ─── */
+  .rb-divider {
+    height: 1px;
+    background: var(--rb-border-s);
+    margin: 0;
+  }
+
+  /* ─── Section card (for form entries) ─── */
+  .rb-entry-card {
+    border-radius: var(--rb-radius-sm);
+    border: 1.5px solid rgba(255,255,255,0.07);
+    overflow: hidden;
+    background: rgba(255,255,255,0.02);
+    transition: border-color 0.2s ease;
+  }
+  .rb-entry-card:hover { border-color: rgba(150,230,48,0.25); }
+  .rb-entry-card.open { border-color: rgba(150,230,48,0.35); }
+
+  .rb-entry-header {
+    @apply flex items-center justify-between w-full text-left
+           transition-colors duration-200 cursor-pointer;
+    padding: 0.75rem 1rem;
+  }
+  .rb-entry-header:hover { background: rgba(255,255,255,0.04); }
+
+  .rb-entry-body {
+    padding: 0 1rem 1rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  /* ─── Skill tag ─── */
+  .rb-skill-tag {
+    @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold
+           transition-all duration-150 cursor-pointer select-none;
+    background: rgba(150,230,48,0.15);
+    color: #a5b4fc;
+    border: 1px solid rgba(150,230,48,0.25);
+  }
+  .rb-skill-tag:hover {
+    background: rgba(239,68,68,0.15);
+    border-color: rgba(239,68,68,0.3);
+    color: #fca5a5;
+  }
+
+  /* ─── Stat box ─── */
+  .rb-stat {
+    @apply flex flex-col items-center justify-center rounded-xl p-3;
+    background: rgba(150,230,48,0.08);
+    border: 1px solid rgba(150,230,48,0.15);
+  }
+
+  /* ─── Empty state ─── */
+  .rb-empty {
+    @apply flex flex-col items-center justify-center text-center py-10;
+    border: 1.5px dashed rgba(255,255,255,0.08);
+    border-radius: var(--rb-radius);
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   RESUME PREVIEW PAPER
+══════════════════════════════════════════════════ */
+.rb-paper {
+  background: #ffffff;
+  color: #1a1a1a;
+  font-family: 'Arial', sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "kern" 1, "liga" 1, "tnum" 1;
+  width: 794px;
+  height: 1123px;
+  min-height: 1123px;
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,0.05),
+    0 4px 16px rgba(0,0,0,0.12),
+    0 24px 64px rgba(0,0,0,0.4);
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.rb-paper-content {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.rb-paper-content > * {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  flex: 1;
+}
+
+.rb-template-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.rb-paper-content-fill {
+  height: 100%;
+}
+
+.rb-paper-content p {
+  line-height: 1.7;
+  color: #334155;
+}
+
+.rb-paper-content h1,
+.rb-paper-content h2,
+.rb-paper-content h3 {
+  letter-spacing: -0.01em;
+}
+
+.rb-paper-content ul {
+  line-height: 1.6;
+}
+
+.rb-paper-content li::marker {
+  color: #64748b;
+}
+
+/* Every direct template child must fill the paper */
+.rb-paper > * {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+/* ══════════════════════════════════════════════════
+   SECTION REORDER DRAG ITEM
+══════════════════════════════════════════════════ */
+.rb-drag-item {
+  @apply flex items-center gap-2 rounded-xl text-sm font-medium
+         transition-all duration-150 cursor-pointer;
+  padding: 0.5rem 0.75rem;
+  color: var(--rb-muted);
+  user-select: none;
+}
+.rb-drag-item:hover  { color: white; background: rgba(255,255,255,0.05); }
+.rb-drag-item.active {
+  color: white;
+  background: rgba(150,230,48,0.2);
+  border: 1px solid rgba(150,230,48,0.35);
+}
+
+/* ══════════════════════════════════════════════════
+   SAVE INDICATOR DOT
+══════════════════════════════════════════════════ */
+.rb-save-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+  animation: rb-pulse-dot 1.5s ease infinite;
+}
+
+/* ══════════════════════════════════════════════════
+   PREVIEW TOOLBAR
+══════════════════════════════════════════════════ */
+.rb-preview-tab {
+  @apply px-4 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 cursor-pointer;
+  color: var(--rb-muted);
+  border: 1px solid transparent;
+}
+.rb-preview-tab.active {
+  color: white;
+  background: rgba(150,230,48,0.2);
+  border-color: rgba(150,230,48,0.35);
+}
+.rb-preview-tab:hover:not(.active) {
+  color: white;
+  background: rgba(255,255,255,0.06);
+}
+
+/* ══════════════════════════════════════════════════
+   SCORE RING (Career Lab)
+══════════════════════════════════════════════════ */
+.rb-score-ring {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ══════════════════════════════════════════════════
+   PRINT / PDF EXPORT
+   Used when usePdfExport injects the resume into a
+   hidden iframe and calls contentWindow.print()
+══════════════════════════════════════════════════ */
+@media print {
+  /* Force color output — no browser stripping backgrounds */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* A4 page with zero margin — the paper element fills it */
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+
+  html, body {
+    width: 210mm;
+    height: 297mm;
+    background: white !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  /* The resume paper element */
+  .rb-paper {
+    width: 210mm !important;
+    height: 297mm !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+}
